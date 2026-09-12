@@ -5,41 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buku Tamu Digital</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Firebase (Cukup Firestore saja, tanpa Storage) -->
+    <!-- Google Fonts untuk tipografi elegan -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Load Firebase (Hanya Firestore) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0d0d0d; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        /* Efek Kaca (Glassmorphism) */
+        .glass {
+            background: rgba(30, 30, 30, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .animate-enter { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body class="bg-[#121212] text-white font-sans min-h-screen pb-12">
-    <div class="max-w-md mx-auto p-4">
+<body class="text-gray-300 min-h-screen pb-16 relative overflow-x-hidden">
+    
+    <!-- Latar Belakang Estetik (Cahaya Pendar) -->
+    <div class="fixed top-[-10%] left-[-10%] w-96 h-96 bg-purple-900 rounded-full mix-blend-screen filter blur-[120px] opacity-40 z-0 pointer-events-none"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-96 h-96 bg-amber-700 rounded-full mix-blend-screen filter blur-[120px] opacity-20 z-0 pointer-events-none"></div>
+
+    <div class="max-w-2xl mx-auto p-5 relative z-10">
+        
         <!-- Header -->
-        <div class="text-center my-8">
-            <h1 class="text-3xl font-serif italic mb-1">Wedding Lina & Sarif</h1>
-            <p class="text-sm text-gray-400 tracking-widest">#ARIFallForLINA</p>
+        <div class="text-center my-10 animate-enter">
+            <h1 class="text-4xl sm:text-5xl font-serif italic mb-3 text-white">Wedding Lina & Sarif</h1>
+            <p class="text-xs text-amber-500 tracking-[0.3em] uppercase font-semibold">#ARIFallForLINA</p>
         </div>
 
         <!-- Form Input -->
-        <form id="guestForm" class="bg-gray-900 border border-gray-800 p-6 rounded-2xl shadow-xl mb-8 space-y-4">
+        <form id="guestForm" class="glass p-6 sm:p-8 rounded-3xl shadow-2xl mb-12 space-y-5 animate-enter" style="animation-delay: 0.1s;">
             <div>
-                <label class="block text-sm text-gray-400 mb-1">Nama Anda</label>
-                <input type="text" id="name" required class="w-full bg-black border border-gray-700 p-3 rounded-xl focus:outline-none focus:border-blue-500 text-white">
+                <label class="block text-xs font-semibold tracking-wider text-gray-400 uppercase mb-2">Nama Anda</label>
+                <input type="text" id="name" required class="w-full bg-black/50 border border-gray-700 p-4 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-white transition">
             </div>
             <div>
-                <label class="block text-sm text-gray-400 mb-1">Ucapan & Doa</label>
-                <textarea id="message" required rows="3" class="w-full bg-black border border-gray-700 p-3 rounded-xl focus:outline-none focus:border-blue-500 text-white"></textarea>
+                <label class="block text-xs font-semibold tracking-wider text-gray-400 uppercase mb-2">Ucapan & Doa</label>
+                <textarea id="message" required rows="3" class="w-full bg-black/50 border border-gray-700 p-4 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-white transition"></textarea>
             </div>
             <div>
-                <label class="block text-sm text-gray-400 mb-1">Momen Foto</label>
-                <input type="file" id="photo" accept="image/*" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-gray-800 file:text-white hover:file:bg-gray-700">
+                <label class="block text-xs font-semibold tracking-wider text-gray-400 uppercase mb-2">Unggah Momen (Opsional)</label>
+                <input type="file" id="photo" accept="image/*" class="w-full text-sm text-gray-400 file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-800 file:text-white hover:file:bg-gray-700 transition cursor-pointer">
             </div>
-            <button type="submit" id="btnSubmit" class="w-full bg-white text-black font-bold py-3 rounded-xl mt-2 hover:bg-gray-200 transition">Kirim Momen</button>
+            <button type="submit" id="btnSubmit" class="w-full bg-white text-black font-bold text-lg py-4 rounded-xl mt-4 hover:bg-gray-200 transition transform active:scale-[0.98]">Kirim Momen</button>
         </form>
 
         <!-- Galeri -->
-        <h2 class="text-lg font-bold mb-4 text-gray-300">Momen Tamu Lainnya</h2>
-        <div id="gallery" class="space-y-4"></div>
+        <div class="text-center mb-8 animate-enter" style="animation-delay: 0.2s;">
+            <h2 class="text-2xl font-serif italic text-white inline-block border-b border-gray-700 pb-2 px-8">Galeri Momen</h2>
+        </div>
+        
+        <!-- Grid Layout untuk Tampilan Kartu -->
+        <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 gap-5 animate-enter" style="animation-delay: 0.3s;"></div>
     </div>
 
     <script>
+        // Konfigurasi dari database milikmu
         const firebaseConfig = {
             apiKey: "AIzaSyCd_5O4GCfOqJgHTyIyHNZ_wa3T2-pqiAw",
             authDomain: "arifallforlina.firebaseapp.com",
@@ -52,7 +83,10 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Fungsi Otomatis Mengecilkan Ukuran Foto (Agar Gratis & Cepat)
+        // Mengambil daftar ID postingan milik HP ini dari penyimpanan browser
+        let myPosts = JSON.parse(localStorage.getItem('guestbook_my_posts')) || [];
+
+        // Fungsi Kompresi Foto (Tetap gratis tanpa storage)
         function compressPhoto(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -62,7 +96,7 @@
                     img.src = event.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 800; // Maksimal lebar foto 800px
+                        const MAX_WIDTH = 800; 
                         let width = img.width;
                         let height = img.height;
 
@@ -76,12 +110,9 @@
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
 
-                        // Ubah jadi teks gambar hemat kuota
-                        resolve(canvas.toDataURL('image/jpeg', 0.7));
+                        resolve(canvas.toDataURL('image/jpeg', 0.6));
                     };
-                    img.onerror = (err) => reject(err);
                 };
-                reader.onerror = (err) => reject(err);
             });
         }
 
@@ -99,20 +130,22 @@
 
             try {
                 if (file) {
-                    // Kompresi foto secara otomatis sebelum dikirim
                     photoUrl = await compressPhoto(file);
                 }
 
-                // Simpan ke Firestore
-                await db.collection("guestbook").add({
+                // Simpan ke Firestore dan tangkap Referensi Dokumennya (docRef)
+                const docRef = await db.collection("guestbook").add({
                     name: name,
                     message: message,
                     photoUrl: photoUrl,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
+                // Simpan ID dokumen ini ke Local Storage browser agar bisa dihapus nanti
+                myPosts.push(docRef.id);
+                localStorage.setItem('guestbook_my_posts', JSON.stringify(myPosts));
+
                 e.target.reset();
-                alert("Berhasil dikirim!");
             } catch (error) {
                 alert("Gagal mengirim: " + error.message);
             }
@@ -121,19 +154,48 @@
             btn.disabled = false;
         });
 
+        // Fungsi Hapus Postingan
+        window.deletePost = async function(docId) {
+            if (confirm("Apakah kamu yakin ingin menghapus momen ini?")) {
+                try {
+                    await db.collection("guestbook").doc(docId).delete();
+                    
+                    // Hapus ID dari Local Storage setelah berhasil dihapus di database
+                    myPosts = myPosts.filter(id => id !== docId);
+                    localStorage.setItem('guestbook_my_posts', JSON.stringify(myPosts));
+                } catch (error) {
+                    alert("Gagal menghapus: " + error.message);
+                }
+            }
+        };
+
         // Tampilkan Galeri secara Realtime
         db.collection("guestbook").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
             const gallery = document.getElementById('gallery');
             gallery.innerHTML = '';
+            
             snapshot.forEach((doc) => {
                 const data = doc.data();
+                const docId = doc.id;
+                
+                // Cek apakah ID dokumen ini ada di daftar postingan milik HP ini
+                const isMyPost = myPosts.includes(docId);
+                
+                // Jika milik sendiri, tampilkan tombol Hapus (Ikon Tempat Sampah)
+                const deleteBtnHtml = isMyPost 
+                    ? `<button onclick="deletePost('${docId}')" class="text-red-400 hover:text-red-300 transition p-1 bg-red-900/30 rounded-lg text-sm" title="Hapus kiriman saya">🗑️ Hapus</button>` 
+                    : ``;
+
                 gallery.innerHTML += `
-                    <div class="bg-gray-900 border border-gray-800 p-4 rounded-xl">
-                        <div class="flex justify-between items-center mb-2">
-                            <p class="font-bold text-white">${data.name}</p>
+                    <div class="glass p-5 rounded-2xl flex flex-col justify-between hover:border-gray-500 transition duration-300">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <p class="font-bold text-white text-lg font-serif italic">${data.name}</p>
+                                ${deleteBtnHtml}
+                            </div>
+                            <p class="text-sm text-gray-300 leading-relaxed">${data.message}</p>
                         </div>
-                        <p class="text-sm text-gray-300">${data.message}</p>
-                        ${data.photoUrl ? `<img src="${data.photoUrl}" class="w-full h-56 object-cover mt-3 rounded-lg border border-gray-700">` : ''}
+                        ${data.photoUrl ? `<div class="mt-4 overflow-hidden rounded-xl"><img src="${data.photoUrl}" class="w-full h-48 object-cover hover:scale-105 transition duration-500"></div>` : ''}
                     </div>
                 `;
             });
