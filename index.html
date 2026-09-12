@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buku Tamu Digital - Wedding</title>
+    <title>The Wedding Celebration Of Lina & Sarif</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Montserrat:wght@300;400;500;600;700&family=Alex+Brush&display=swap" rel="stylesheet">
 
@@ -769,8 +769,10 @@
             const W = 800;
             const pad = 30;
             const photoW = W - pad * 2;
-            const aspect = 0.8; // lebar / tinggi, potret ala polaroid
-            const photoH = Math.round(photoW / aspect);
+            const srcAspect = img.width / img.height; // lebar / tinggi asli foto
+            // Tinggi area foto mengikuti rasio asli, dibatasi agar bingkai tidak terlalu ekstrem
+            const rawPhotoH = photoW / srcAspect;
+            const photoH = Math.round(Math.min(Math.max(rawPhotoH, photoW * 0.55), photoW * 1.6));
             const captionH = 200;
             const bottomPad = 36;
             const H = pad + photoH + captionH + bottomPad;
@@ -784,24 +786,18 @@
             roundRectPath(ctx, 0, 0, W, H, 20);
             ctx.fill();
 
-            const srcAspect = img.width / img.height;
-            let sx, sy, sw, sh;
-            if (srcAspect > aspect) {
-                sh = img.height;
-                sw = sh * aspect;
-                sx = (img.width - sw) / 2;
-                sy = 0;
-            } else {
-                sw = img.width;
-                sh = sw / aspect;
-                sx = 0;
-                sy = (img.height - sh) / 2;
-            }
-
             ctx.save();
             roundRectPath(ctx, pad, pad, photoW, photoH, 12);
             ctx.clip();
-            ctx.drawImage(img, sx, sy, sw, sh, pad, pad, photoW, photoH);
+            ctx.fillStyle = '#FDFBF7';
+            ctx.fill();
+            // Muat penuh (contain) — tidak ada bagian foto yang terpotong
+            const scale = Math.min(photoW / img.width, photoH / img.height);
+            const dw = img.width * scale;
+            const dh = img.height * scale;
+            const dx = pad + (photoW - dw) / 2;
+            const dy = pad + (photoH - dh) / 2;
+            ctx.drawImage(img, dx, dy, dw, dh);
             ctx.restore();
 
             ctx.strokeStyle = 'rgba(114,47,55,0.15)';
