@@ -774,7 +774,7 @@
             // Tinggi area foto mengikuti rasio asli, dibatasi agar bingkai tidak terlalu ekstrem
             const rawPhotoH = photoW / srcAspect;
             const photoH = Math.round(Math.min(Math.max(rawPhotoH, photoW * 0.55), photoW * 1.6));
-            const captionH = 200;
+            const captionH = 215;
             const bottomPad = 36;
             const H = pad + photoH + captionH + bottomPad;
 
@@ -807,7 +807,7 @@
             ctx.stroke();
 
             const centerX = W / 2;
-            let textY = pad + photoH + 66;
+            let textY = pad + photoH + 60;
 
             ctx.textAlign = 'center';
             ctx.textBaseline = 'alphabetic';
@@ -820,10 +820,14 @@
             ctx.stroke();
 
             ctx.fillStyle = '#722F37';
-            ctx.font = '400 54px "Alex Brush", cursive';
-            ctx.fillText(WEDDING_INFO.title, centerX, textY);
+            ctx.font = '400 38px "Alex Brush", cursive';
+            ctx.fillText(WEDDING_INFO.titleLine1, centerX, textY);
 
-            textY += 38;
+            textY += 56;
+            ctx.font = '400 58px "Alex Brush", cursive';
+            ctx.fillText(WEDDING_INFO.titleLine2, centerX, textY);
+
+            textY += 40;
             ctx.font = '700 14px "Montserrat", sans-serif';
             ctx.fillStyle = 'rgba(114,47,55,0.75)';
             drawTrackedText(ctx, WEDDING_INFO.hashtag.toUpperCase(), centerX, textY, 2);
